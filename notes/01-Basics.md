@@ -216,3 +216,281 @@ fn main() {
 
 > Accessing an element outside the bounds of the array will cause a panic at runtime.
 
+## Functions
+
+* Convention: `snake_case` for function names
+
+### Parameters
+
+Requires type annotations for parameters.
+
+Multiple parameters are separated by commas.
+
+```rust
+fn main() {
+  let x = 5;
+  let y = 10;
+  add(x, y);
+}
+
+fn add(x: i32, y: i32) -> i32 {
+  println!("The sum of {} and {} is: {}", x, y, x + y);
+}
+```
+
+### Statements
+
+Statements do not return a value, they are executed for their side effects.
+
+Every statement ends with a semicolon (`;`).
+
+```rust
+fn main() {
+  let x = 5; // statement
+  let y = 10; // statement
+
+  let z = (let w = 20); // Error, because `let` is a statement, not an expression. Does not return a value.
+}
+```
+
+### Expressions
+
+Expressions evaluate to a value and can be used in statements.
+They return a value.
+
+Must not end with a semicolon (`;`), otherwise they will be treated as statements.
+
+```rust
+fn main() {
+  let x = 5; // statement
+  let y = {
+    let z = 10; // expression
+    z + 1 // expression, returns a value
+  };
+  println!("The value of y is: {}", y); // 11
+}
+```
+
+### Return Values
+
+Type annotations are required for return values.
+
+`->` operator is used to specify the return type of a function.
+
+```rust
+fn main() {
+  let x = add(5, 10);
+  println!("The sum of 5 and 10 is: {}", x); // 15
+}
+
+fn add(x: i32, y: i32) -> i32 {
+  x + y // expression, returns a value
+}
+```
+
+The `return` statement is optional, the last expression in a function is the return value.
+It can be used to return early from a function.
+
+Must not end with a semicolon (`;`), otherwise it will be treated as a statement.
+
+* Multiple return values can be returned using tuples.
+
+## Comments
+
+Use `//` for single-line comments and `/* */` for multi-line comments.
+
+```rust
+fn main() {
+  // This is a single-line comment
+  let x = 5; // This is an inline comment
+  println!("The value of x is: {}", x);
+  /* This is a
+  * multi-line comment
+  * that spans multiple lines */
+  println!("This is a multi-line comment example");
+}
+```
+
+## Control Flow
+
+### `if` Expressions
+
+```rust
+fn main() {
+  let number = 6;
+  if number % 4 == 0 {
+    println!("Number is divisible by 4");
+  } else if number % 3 == 0 {
+    println!("Number is divisible by 3");
+  } else {
+    println!("Number is not divisible by 4 or 3");
+  }
+}
+```
+
+`if` expressions expect a boolean value
+
+```rust
+fn main() {
+  let number = 6;
+  if number {
+    println!("This will not compile, because `number` is not a boolean");
+  }
+}
+```
+
+#### `if` in `let` Statements
+
+`if` is an expression, meaning it returns a value.
+
+```rust
+fn main() {
+  let number = 6;
+  let result = if number % 2 == 0 {
+    "even"
+  } else {
+    "odd"
+  };
+  println!("The number is: {}", result); // The number is: even
+}
+```
+
+All arms must return the same type
+
+```rust
+fn main() {
+  let number = 6;
+  let result = if number % 2 == 0 {
+    "even"
+  } else {
+    1 // Error, because the first branch returns a string and the second branch returns an integer
+  };
+}
+```
+
+### Loops
+
+#### `loop`
+
+Basic loop that runs indefinitely until explicitly broken out of.
+
+```rust
+fn main() {
+  let mut counter = 0;
+  loop {
+    counter += 1;
+    println!("Counter: {}", counter);
+  }
+}
+```
+
+Use `break` to exit the loop.
+
+> Basically just a `while true` loop.
+
+#### Returning Values from Loops
+
+`break` can be used like a `return` statement to return a value from the loop.
+
+```rust
+fn main() {
+  let mut counter = 0;
+  let result = loop {
+    counter += 1;
+    if counter == 5 {
+      break counter * 2; // Returns 10 when the loop ends
+    }
+  };
+  println!("The result is: {}", result); // The result is: 10
+}
+```
+
+`return` can also be used to return a value from a loop, but it also exits the function.
+
+`break` and `continue` only acts on the innermost loop.
+
+To act upon an outer loop, labels can be used.
+
+* Labels are defined with an apostrophe (`'`) followed by a name.
+
+```rust
+
+fn main() {
+    let mut count = 0;
+    'counting_up: loop {
+        println!("count = {count}");
+        let mut remaining = 10;
+
+        loop {
+            println!("remaining = {remaining}");
+            if remaining == 9 {
+                break;
+            }
+            if count == 2 {
+                break 'counting_up;
+            }
+            remaining -= 1;
+        }
+
+        count += 1;
+    }
+    println!("End count = {count}");
+}
+```
+
+### `while`
+
+Loop that runs while a condition is true.
+
+```rust
+fn main() {
+    let mut number = 3;
+    while number != 0 {
+        println!("{number}!");
+        number -= 1;
+    }
+    println!("LIFTOFF!!!");
+}
+```
+
+### `for`
+
+Loop that iterates over a collection or a range.
+
+Simplifies:
+
+```rust
+fn main() {
+    let a = [10, 20, 30, 40, 50];
+    let mut index = 0;
+
+    while index < 5 {
+        println!("the value is: {}", a[index]);
+
+        index += 1;
+    }
+}
+```
+
+To:
+
+```rust
+fn main() {
+    let a = [10, 20, 30, 40, 50];
+
+    for element in a {
+        println!("the value is: {element}");
+    }
+}
+```
+
+[LIFTOFF while loop](#while)
+
+```rust
+fn main() {
+    for number in (1..4).rev() {
+        println!("{number}!");
+    }
+    println!("LIFTOFF!!!");
+}
+```
