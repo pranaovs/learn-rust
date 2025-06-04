@@ -37,13 +37,13 @@ or until the second variable is shadowed by another variable.
 
 ```rust
 fn main() {
-    let x = 5;
-    let x = x + 1; // shadowing, x is now 6
-    {
-        let x = x * 2; // shadowing
-        println!("The value of x in the inner scope is: {}", x); // 12
-    }
-    println!("The value of x in the outer scope is: {}", x); // 6
+  let x = 5;
+  let x = x + 1; // shadowing, x is now 6
+  {
+    let x = x * 2; // shadowing
+    println!("The value of x in the inner scope is: {}", x); // 12
+  }
+  println!("The value of x in the outer scope is: {}", x); // 6
 }
 ```
 
@@ -149,3 +149,70 @@ fn main() {
   let heart_eyed_cat = '😻'; // Unicode character
 }
 ```
+
+4 bytes in size, representing a single Unicode scalar value.
+Single quotes are used for characters, while double quotes are used for strings.
+
+### Compound Types
+
+Multiple values in a single type.
+
+#### Tuples
+
+General way of grouping together a number of values with different types.
+
+Fixed length, once declared, the length cannot change.
+
+```rust
+fn main() {
+  let tup: (i32, f64, u8) = (500, 6.4, 1);
+  let (x, y, z) = tup; // destructuring
+  println!("The value of y is: {}", y); // 6.4
+}
+```
+
+To access a tuple element, use a period followed by the index of the element:
+
+```rust
+fn main() {
+  let tup: (i32, f64, u8) = (500, 6.4, 1);
+  println!("The value of the first element is: {}", tup.0); // 500
+  println!("The value of the second element is: {}", tup.1); // 6.4
+  println!("The value of the third element is: {}", tup.2); // 1
+}
+```
+
+#### Arrays
+
+Every element must have the same type, and the length is fixed.
+
+```rust
+fn main() {
+  let a = [1, 2, 3, 4, 5]; // array of integers
+  let b: [i32; 5] = [1, 2, 3, 4, 5]; // array with type annotation
+  println!("The first element of a is: {}", a[0]); // 1
+}
+```
+
+Data is stored on the stack, unlike vectors which are stored on the heap.
+
+```rust
+fn main() {
+  let months = [
+    "January", "February", "March", "April", "May",
+    "June", "July", "August", "September", "October",
+    "November", "December"
+  ]; // array of strings
+}
+```
+
+```rust
+fn main() {
+  let a: [i32; 5] = [1, 2, 3, 4, 5]; // array with type annotation
+  let b = [3; 5]; // array with all elements initialized to 3
+  let c: [i32; 5] = [0; 5]; // array with type annotation with all elements initialized to 0
+}
+```
+
+> Accessing an element outside the bounds of the array will cause a panic at runtime.
+
