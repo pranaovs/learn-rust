@@ -1,17 +1,35 @@
 use std::io;
 
+#[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
 }
 
-fn main() {
-    let rect = Rectangle {
-        width: get_input("width"),
-        height: get_input("height"),
-    };
+impl Rectangle {
+    fn new(width: u32, height: u32) -> Self {
+        Self { width, height }
+    }
 
-    println!("The area of the rectangle is: {}", area(&rect));
+    fn build() -> Self {
+        let width = get_input("width");
+        let height = get_input("height");
+        Self::new(width, height)
+    }
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+
+fn main() {
+    let rect = Rectangle::build();
+    // dbg!(&rect);
+
+    // println!("The rectangle is: {rect:#?}");
+
+    // println!("The area of the rectangle is: {}", area(&rect));
+
+    println!("The area of the rectangle is: {}", rect.area());
 }
 
 fn get_input(inp: &str) -> u32 {

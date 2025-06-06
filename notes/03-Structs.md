@@ -5,7 +5,7 @@ Structs are useful for representing complex data structures in a more organized 
 
 Unlike tuples, structs allow you to define named fields, making the code more readable and maintainable.
 
-* Keyword: `struct`
+- Keyword: `struct`
 
 ```rust
 struct Point {
@@ -100,4 +100,85 @@ fn main() {
 > It is possible to store references to data in structs,
 > but you need to be careful with lifetimes to avoid dangling references.
 
+## Debugging structs
 
+`#[derive(Debug)]` can be used to automatically implement the `Debug` trait for structs,
+which allows you to print them using the `{:?}` format specifier.
+
+```rust
+#[derive(Debug)]
+struct Point {
+  x: f64,
+  y: f64,
+}
+
+fn main() {
+  let p = Point { x: 1.0, y: 2.0 };
+  println!("Point: {:?}", p); // Prints: Point: Point { x: 1.0, y: 2.0 }
+  // println!("Point: {p:?}")
+}
+```
+
+`{:#?}` can be used for pretty-printing the struct with indentation.
+
+```rust
+println!("Point: {:#?}", p); // Prints: Point: Point {
+  //  x: 1.0,
+  //  y: 2.0,
+  //}
+}
+```
+
+### `dbg!` macro
+
+The `dbg!()` macro is a convenient way to print debug information about variables.
+It prints the value and the source location where it was called.
+It prints to standard error (`stderr`)
+
+- `dbg!` macro takes ownership of the value, and the value back,
+  so it can be used in expressions and in any form of data like structs, tuples, etc.
+
+```rust
+dbg!(p); // Prints: [src/main.rs:10] p = Point { x: 1.0, y: 2.0 }
+```
+
+## Methods
+
+Methods are functions defined within the context of a struct.
+
+- The first parameter of a method is always `self`, which represents the instance of the struct.
+
+Defined using `impl` block.
+
+```rust
+
+#[derive(Debug)]
+struct Point {
+  x: f64,
+  y: f64,
+}
+
+impl Point {
+  fn new(x: f64, y: f64) -> Self {
+    Point { x, y }
+  }
+
+  fn distance(&self) -> f64 {
+    (self.x.powi(2) + self.y.powi(2)).sqrt()
+  }
+}
+
+fn main() {
+  let p = Point::new(3.0, 4.0);
+  println!("Point: {:?}", p);
+  println!("Distance from origin: {}", p.distance()); // Prints: 5.0
+}
+```
+
+- `::` is used to call associated functions (like `new`) and methods on structs.
+- `.` is used to access fields and methods on an instance of a struct.
+- `self` is a reference to the instance of the struct, allowing access to its fields and methods.
+
+> Rust does not have the `->` operator for methods like in some other languages.
+> Instead, you use `.` to call methods on an instance of a struct.
+> This is called _automatic dereferencing_.
